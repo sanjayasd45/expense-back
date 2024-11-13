@@ -14,7 +14,7 @@ router.get("/login/success", (req, res) => {
             error : false,
             message : "successfully registered",
             user : req.user
-        })
+        }) 
     }else{
         console.log("error");
         res.status(403).json({error:true, message : "not authenticated"})
