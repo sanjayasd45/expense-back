@@ -23,7 +23,6 @@ mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mong
     .then(() => {
         app.listen(port, () => {
             console.log('server is running at ', port);
-            
         })
     })
     
@@ -31,7 +30,7 @@ const sessionConfig = {
     secret: 'userp-',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: true },
     maxAge: 24 * 60 * 60 * 100
 };
 app.use(session(sessionConfig));
