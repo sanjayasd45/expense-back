@@ -45,7 +45,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize())
 app.use(passport.session(sessionConfig))
 app.use(express.urlencoded({ extended: true }));
-
+app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(`https://${req.headers.host}${req.url}`);
+    }
+    next();
+  });
 app.use("/auth", authRoutes)
 app.use("/amount", addAmount)
 app.use("/spending", addSpending)
