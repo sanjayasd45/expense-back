@@ -30,12 +30,13 @@ passport.use(new GoogleStrategy({
     .then(existingUser => {
         if (existingUser) {
             console.log(existingUser); 
-        } else {
-            
+        } else {   
+            console.log("1");
             return new User(user).save()
         }
+    }).then(() => {
+        callback(null, profile)
+        console.log("2");
     })
     .catch(err => console.log(err));
-
-    callback(null, profile)
 }))

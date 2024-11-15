@@ -14,6 +14,7 @@ const filter = require('./routes/filter.routes.js')
 const passportSetup = require("./passport.js");
 const session = require('express-session')
 const clientUrl = process.env.CLIENT_URL
+const secure = process.env.NODE_ENV === 'production'; 
 
 
 const app = express()
@@ -30,7 +31,7 @@ const sessionConfig = {
     secret: 'userp-',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { secure: secure },
     maxAge: 24 * 60 * 60 * 100
 };
 app.use(session(sessionConfig));
@@ -45,12 +46,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize())
 app.use(passport.session(sessionConfig))
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      return res.redirect(`https://${req.headers.host}${req.url}`);
-    }
-    next();
-  });
+// app.use((req, res, next) => {
+//     if (req.headers['x-forwarded-proto'] !== 'https') {
+//       return res.redirect(`https://${req.headers.host}${req.url}`);
+//     }
+//     next();
+//   });
 app.use("/auth", authRoutes)
 app.use("/amount", addAmount)
 app.use("/spending", addSpending)
