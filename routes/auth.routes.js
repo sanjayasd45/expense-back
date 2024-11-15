@@ -9,6 +9,7 @@ router.get("/login/faild", (req, res) => {
     })
 })
 router.get("/login/success", (req, res) => {
+    
     if(req.user){
         res.status(200).json({
             error : false,

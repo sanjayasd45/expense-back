@@ -14,7 +14,11 @@ const filter = require('./routes/filter.routes.js')
 const passportSetup = require("./passport.js");
 const session = require('express-session')
 const clientUrl = process.env.CLIENT_URL
+const Redis = require('redis');
+const RedisStore = require('connect-redis').default; 
 const secure = process.env.NODE_ENV === 'production'; 
+const redisPassword = process.env.REDISPASS
+const sessionSecret = process.env.SESSION_SECRET
 
 
 const app = express()
@@ -27,31 +31,47 @@ mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mong
         })
     })
     
+// const sessionConfig = {
+//     secret: 'userp-',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: secure },
+//     maxAge: 24 * 60 * 60 * 100
+// };
+// app.use(session(sessionConfig));
+const redisClient = Redis.createClient({
+    password: redisPassword,
+    socket: {
+      host: 'redis-10188.c323.us-east-1-2.ec2.redns.redis-cloud.com',
+      port: 10188
+    }
+  });
+redisClient.connect()
+  .then(() => console.log('Connected to Redis'))
+  .catch((error) => console.error('Error connecting to Redis:', error));
+
 const sessionConfig = {
-    secret: 'userp-',
+    store: new RedisStore({ client: redisClient }),
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: secure },
-    maxAge: 24 * 60 * 60 * 100
+    cookie: { secure: secure }, 
+    maxAge: 7 * 24 * 60 * 60 * 1000  // 7 day session expiration
 };
-app.use(session(sessionConfig));
+
 app.use(cors({
     origin: clientUrl,
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
 }));
+
+app.use(session(sessionConfig));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(passport.initialize())
 app.use(passport.session(sessionConfig))
 app.use(express.urlencoded({ extended: true }));
-// app.use((req, res, next) => {
-//     if (req.headers['x-forwarded-proto'] !== 'https') {
-//       return res.redirect(`https://${req.headers.host}${req.url}`);
-//     }
-//     next();
-//   });
 app.use("/auth", authRoutes)
 app.use("/amount", addAmount)
 app.use("/spending", addSpending)
