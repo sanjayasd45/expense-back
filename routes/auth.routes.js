@@ -9,7 +9,11 @@ router.get("/login/faild", (req, res) => {
     })
 })
 router.get("/login/success", (req, res) => {
-    console.log("req.user => ",req.user);
+    console.log("Session ID:", req.sessionID); // Check session ID
+    console.log("Session Data:", req.session); // Check session data
+    console.log("User Info:", req.user);
+    console.log("req.session.passport.user => ",req.session.passport.user);
+
     if(req.user){
         res.status(200).json({
             error : false,

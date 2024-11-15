@@ -46,6 +46,7 @@ const redisClient = Redis.createClient({
       port: 10188
     }
   });
+
 redisClient.connect()
   .then(() => console.log('Connected to Redis'))
   .catch((error) => console.error('Error connecting to Redis:', error));
@@ -62,7 +63,7 @@ const sessionConfig = {
 app.use(cors({
     origin: clientUrl,
     methods: "GET,POST,PUT,DELETE,PATCH",
-    credentials: true,
+    credentials : true,
 }));
 
 app.use(session(sessionConfig));
