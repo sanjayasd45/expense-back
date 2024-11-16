@@ -9,6 +9,7 @@ passport.serializeUser((user, done) => {
     done(null, user)
 });
 passport.deserializeUser(async(user, done) => {
+    console.log("deserializeUser");
     console.log("deserializeUser => ", user);
     done(null, user)
 })
