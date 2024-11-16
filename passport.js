@@ -5,11 +5,11 @@ const serverUrl = process.env.SERVER_BASE_URL
 
 
 passport.serializeUser((user, done) => {
+    console.log("serializeUser => ", user);
     done(null, user)
 });
 passport.deserializeUser(async(user, done) => {
     console.log("deserializeUser => ", user);
-    
     done(null, user)
 })
 
@@ -40,7 +40,7 @@ passport.use(
                 }
 
                 // Pass user to Passport
-                callback(null, existingUser);
+                callback(null, user);
             } catch (error) {
                 console.error(error);
                 callback(error);
