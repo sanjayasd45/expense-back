@@ -38,19 +38,18 @@ mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mong
 //     cookie: { secure: secure },
 //     maxAge: 24 * 60 * 60 * 100
 // };
-// app.use(session(sessionConfig));
 const redisClient = Redis.createClient({
-    password: redisPassword,
-    socket: {
-      host: 'redis-10188.c323.us-east-1-2.ec2.redns.redis-cloud.com',
-      port: 10188
-    }
-  });
-
-redisClient.connect()
-  .then(() => console.log('Connected to Redis'))
-  .catch((error) => console.error('Error connecting to Redis:', error));
-
+        password: redisPassword,
+        socket: {
+              host: 'redis-10188.c323.us-east-1-2.ec2.redns.redis-cloud.com',
+              port: 10188
+            }
+          });
+        
+        redisClient.connect()
+          .then(() => console.log('Connected to Redis'))
+          .catch((error) => console.error('Error connecting to Redis:', error));
+        
 const sessionConfig = {
     store: new RedisStore({ client: redisClient }),
     secret: sessionSecret,
@@ -59,7 +58,8 @@ const sessionConfig = {
     cookie: { secure: secure }, 
     maxAge: 7 * 24 * 60 * 60 * 1000  // 7 day session expiration
 };
-
+        
+// app.use(session(sessionConfig));      
 app.use(cors({
     origin: clientUrl,
     methods: "GET,POST,PUT,DELETE,PATCH",

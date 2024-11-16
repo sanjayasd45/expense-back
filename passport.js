@@ -8,21 +8,7 @@ passport.serializeUser((user, done) => {
     done(null, user)
 });
 passport.deserializeUser(async(user, done) => {
-    // const usernew = {
-    //     _id : user._id,
-    //     name : user.name,
-    //     email : user.email,
-    //     profile_img : user.profile_img
-    // }
-
-    // const cachedUser = await Redis.redisClient.get(`user:${usernew}`);
-    // if (cachedUser) {
-    //     return done(null, JSON.parse(cachedUser)); // Return cached user
-    // }
-    // if (user) {
-    //     await redisClient.set(`user:${usernew}`, JSON.stringify(user), { EX: 3600 }); // Cache for 1 hour
-    //     return done(null, user);
-    // }
+    console.log("deserializeUser => ", user);
     
     done(null, user)
 })
