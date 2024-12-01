@@ -20,6 +20,7 @@ const RedisStore = require('connect-redis').default;
 const secure = process.env.NODE_ENV === 'production'; 
 const redisPassword = process.env.REDISPASS
 const sessionSecret = process.env.SESSION_SECRET
+const cookieParser = require('cookie-parser');
 
 
 const app = express()
@@ -93,7 +94,7 @@ app.use((req, res, next) => {
     next();
 });
 
-
+app.use(cookieParser(sessionSecret));
 app.use(session(sessionConfig));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
