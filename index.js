@@ -83,6 +83,17 @@ app.use(cors({
     credentials : true,
 }));
 
+app.use((req, res, next) => {
+    console.log("Incoming Request:", {
+        method: req.method,
+        path: req.path,
+        headers: req.headers,
+        cookies: req.cookies
+    });
+    next();
+});
+
+
 app.use(session(sessionConfig));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

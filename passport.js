@@ -7,7 +7,7 @@ const serverUrl = process.env.SERVER_BASE_URL
 
 passport.serializeUser((user, done) => {
     console.log("Serializing user:", user);
-    done(null, user.email); // Use a unique identifier like email
+    done(null, user.email); 
 });
 
 passport.deserializeUser(async (email, done) => {
