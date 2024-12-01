@@ -11,7 +11,7 @@ router.get("/login/faild", (req, res) => {
 router.get("/login/success", (req, res) => {
     // console.log("Session ID:", req.sessionID); // Check session ID
     console.log("Session Data:", req.session);// Check session data
-    // console.log("User Info:", req.user);
+    console.log("User Info:", req.user);
     // console.log("req.session.passport.user => ",req.session.passport.user);
 
     if(req.user){
@@ -21,7 +21,7 @@ router.get("/login/success", (req, res) => {
             user : req.user
         }) 
     }else{
-        console.log("error");
+        // console.log("error");
         res.status(403).json({error:true, message : "not authenticated"})
     }
 })
