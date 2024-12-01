@@ -6,14 +6,23 @@ const serverUrl = process.env.SERVER_BASE_URL
 // module.exports.userInfo = {}
 
 passport.serializeUser((user, done) => {
-    console.log("serializeUser => ", user);
-    done(null, user)
+    console.log("Serializing user:", user);
+    done(null, user.email); // Use a unique identifier like email
 });
-passport.deserializeUser(async(user, done) => {
-    console.log("deserializeUser");
-    console.log("deserializeUser => ", user);
-    done(null, user)
-})
+
+passport.deserializeUser(async (email, done) => {
+    try {
+        console.log("Deserializing user with email:", email);
+        const user = await User.findOne({ email });
+        if (user) {
+            done(null, user);
+        } else {
+            done(new Error('User not found'));
+        }
+    } catch (error) {
+        done(error);
+    }
+});
 
 
 passport.use(
@@ -23,6 +32,7 @@ passport.use(
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: `${serverUrl}/auth/google/callback`,
             passReqToCallback: true,
+            proxy: true,
             scope: ["profile", "email"],
         },
         async (req, accessToken, refreshToken, profile, callback) => {

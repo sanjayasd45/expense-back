@@ -10,22 +10,27 @@ router.get("/login/faild", (req, res) => {
     })
 })
 router.get("/login/success", (req, res) => {
-    // console.log("Session ID:", req.sessionID); // Check session ID
-    console.log("Session Data:", req.session);// Check session data
-    console.log("User Info:", req.user);
-    // console.log("req.session.passport.user => ",req.session.passport.user);
+    console.log("Session:", req.session);
+    console.log("User:", req.user);
+    console.log("Is Authenticated:", req.isAuthenticated());
 
-    if(req.user){
+    if (req.isAuthenticated()) {
         res.status(200).json({
-            error : false,
-            message : "successfully registered",
-            user : req.user
-        }) 
-    }else{
-        // console.log("error");
-        res.status(403).json({error:true, message : "not authenticated"})
+            error: false,
+            message: "Successfully authenticated",
+            user: {
+                name: req.user.name,
+                email: req.user.email,
+                profile_img: req.user.profile_img
+            }
+        });
+    } else {
+        res.status(403).json({
+            error: true, 
+            message: "Not authenticated"
+        });
     }
-})
+});
 router.get("/google/callback", passport.authenticate("google", {
     successRedirect: process.env.CLIENT_URL,
     failureRedirect: "/login/faild"
