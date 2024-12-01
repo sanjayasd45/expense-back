@@ -3,6 +3,7 @@ const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const User = require("./models/user.model.js");
 const serverUrl = process.env.SERVER_BASE_URL
 
+// module.exports.userInfo = {}
 
 passport.serializeUser((user, done) => {
     console.log("serializeUser => ", user);
@@ -13,6 +14,7 @@ passport.deserializeUser(async(user, done) => {
     console.log("deserializeUser => ", user);
     done(null, user)
 })
+
 
 passport.use(
     new GoogleStrategy(

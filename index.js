@@ -13,6 +13,7 @@ const addSpending = require('./routes/spending.routes.js')
 const filter = require('./routes/filter.routes.js')
 const passportSetup = require("./passport.js");
 const session = require('express-session')
+const MongoStore = require('connect-mongo');
 const clientUrl = process.env.CLIENT_URL
 const Redis = require('redis');
 const RedisStore = require('connect-redis').default; 
@@ -38,26 +39,39 @@ mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mong
 //     cookie: { secure: secure },
 //     maxAge: 24 * 60 * 60 * 100
 // };
-const redisClient = Redis.createClient({
-        password: redisPassword,
-        socket: {
-              host: 'redis-10188.c323.us-east-1-2.ec2.redns.redis-cloud.com',
-              port: 10188
-            }
-          });
+// const redisClient = Redis.createClient({
+//         password: redisPassword,
+//         socket: {
+//               host: 'redis-10188.c323.us-east-1-2.ec2.redns.redis-cloud.com',
+//               port: 10188
+//             }
+//           });
         
-        redisClient.connect()
-          .then(() => console.log('Connected to Redis'))
-          .catch((error) => console.error('Error connecting to Redis:', error));
-        
+//         redisClient.connect()
+//           .then(() => console.log('Connected to Redis'))
+//           .catch((error) => console.error('Error connecting to Redis:', error));
+
+const store = MongoStore.create({
+    mongoUrl: `mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/expt?retryWrites=true&w=majority`,
+    crypto: {
+      secret: "mysupersecretcode",
+    },
+    touchAfter: 24 * 3600,
+  });
+
+store.on("error", () => {
+    console.log("ERROR in MONGO SESSION STORE", err);
+    });
+
 const sessionConfig = {
-    store: new RedisStore({ client: redisClient }),
+    store,
     secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: secure }, 
     maxAge: 7 * 24 * 60 * 60 * 1000  // 7 day session expiration
 };
+
         
 // app.use(session(sessionConfig));      
 app.use(cors({

@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
+const { userInfo } = require("../passport");
 
 
 router.get("/login/faild", (req, res) => {
