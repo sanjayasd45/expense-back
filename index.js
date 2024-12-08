@@ -84,15 +84,7 @@ app.use(cors({
     credentials : true,
 }));
 
-app.use((req, res, next) => {
-    console.log("Incoming Request:", {
-        method: req.method,
-        path: req.path,
-        headers: req.headers,
-        cookies: req.cookies
-    });
-    next();
-});
+
 
 app.use(cookieParser(sessionSecret));
 app.use(session(sessionConfig));
