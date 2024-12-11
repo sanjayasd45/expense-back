@@ -25,8 +25,11 @@ const cookieParser = require('cookie-parser');
 
 const app = express()
 
-
-mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/expt?retryWrites=true&w=majority`)
+let DBType = "test";
+if(secure){
+    DBType = "expt"
+}
+mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/${DBType}?retryWrites=true&w=majority`)
     .then(() => {
         app.listen(port, () => {
             console.log('server is running at ', port);
@@ -53,12 +56,14 @@ mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mong
 //           .catch((error) => console.error('Error connecting to Redis:', error));
 
 const store = MongoStore.create({
-    mongoUrl: `mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/expt?retryWrites=true&w=majority`,
+    mongoUrl: `mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/${DBType}?retryWrites=true&w=majority`,
     crypto: {
       secret: "mysupersecretcode",
     },
     touchAfter: 24 * 3600,
   });
+
+
 
 store.on("error", () => {
     console.log("ERROR in MONGO SESSION STORE", err);

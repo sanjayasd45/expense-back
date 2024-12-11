@@ -6,8 +6,6 @@ const bcrypt = require("bcryptjs");
 const loginController = async(req, res) => {
     let username = req.body.username.trim()
     let password = req.body.password.trim()
-    console.log("username -> ", username, "password -> ", password);
-
     if(!username || !password){
         return res.status(409).json({
             message : "incomplete Info"
@@ -76,17 +74,12 @@ const signupController = async (req, res, next) => {
                  }
             });
         }
-
-        // Hash the password before saving
-        // const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create the user
+        
         const user = await User.create({
             name,
             username,
             email,
             password
-            // password: hashedPassword,
         });
 
         if (user) {
