@@ -100,6 +100,7 @@ app.use(passport.initialize())
 app.use(passport.session(sessionConfig))
 app.use(express.urlencoded({ extended: true }));
 app.use("/auth", authRoutes)
+app.use("/user", userRoutes)
 app.use("/amount", addAmount)
 app.use("/spending", addSpending)
 app.use("/filter", filter)
