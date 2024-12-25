@@ -16,11 +16,11 @@ module.exports.addSpending = async(req, res) => {
 }
 module.exports.getRecentData = async (req, res) => {
 
-    console.log(req.body);
+    console.log("getRecentData",req.body);
     const { email } = req.body.body;
     try {
         const response = await Add.find({ email });
-        console.log(response);
+        console.log("getRecentData",response);
         
         res.status(200).json({ message: "Spending data retrieved successfully", response });
     } catch (error) {

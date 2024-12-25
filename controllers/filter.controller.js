@@ -2,7 +2,7 @@ const Add = require('../models/add.model')
 
 module.exports.alltime = async (req, res) => {
     const email = req.body.body 
-    console.log("req.body.body",req.body.body);
+    // console.log("req.body.body",req.body.body);
     try{
         const pipeline = [
             {

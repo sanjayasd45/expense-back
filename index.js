@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/user.routes')
 const authRoutes = require('./routes/auth.routes')
 const addAmount = require('./routes/amount.routes.js')
+const deleteRoute = require('./routes/delete.routes.js')
 const addSpending = require('./routes/spending.routes.js')
 const filter = require('./routes/filter.routes.js')
 const passportSetup = require("./passport.js");
@@ -104,6 +105,7 @@ app.use("/user", userRoutes)
 app.use("/amount", addAmount)
 app.use("/spending", addSpending)
 app.use("/filter", filter)
+app.use("/delete", deleteRoute)
 app.get("/", (req, res) => {
     res.send("i am root")
 })
