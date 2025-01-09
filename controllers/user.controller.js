@@ -12,14 +12,15 @@ const loginController = async(req, res) => {
         })
     } 
     const user = await User.findOne({username});
-    // console.log(user);
+    console.log("user from login" , user);
     if(user && (await user.matchPassword(password, user.password))){ 
         const response = {
             _id : user._id,
             name : user.name,
             username : user.username,
             email : user.email,
-            token : generateToken(user._id)
+            token : generateToken(user._id),
+            createdAt : user.createdAt
         }
         res.json(response)
     }else{
