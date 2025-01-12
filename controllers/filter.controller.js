@@ -99,7 +99,8 @@ module.exports.dateRange = async (req, res) => {
       .json({ error: "Both startDate and endDate are required" });
   }
   const start = new Date(startDate);
-  const end = new Date(endDate);
+  let end = new Date(endDate);
+  end.setUTCHours(23, 59, 59, 999); 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return res
         .status(400)
@@ -151,3 +152,89 @@ module.exports.dateRange = async (req, res) => {
       }
   } 
 };
+module.exports.searchUdhari = async(req, res) => {
+  const {startDate, endDate, email} = req.body.body
+  if (!startDate || !endDate) {
+    return res
+      .status(400)
+      .json({ error: "Both startDate and endDate are required" });
+  }
+  const start = new Date(startDate);
+  let end = new Date(endDate);
+      end.setUTCHours(23, 59, 59, 999); 
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res
+        .status(400)
+        .json({ error: "Invalid date format. Use YYYY-MM-DD." });
+    }
+  
+  try{
+    const pipeline = [
+      {
+        $match: {
+          email: email,
+          createdAt: {
+            $gte: new Date(start), 
+            $lte: new Date(end)    
+          }
+        },
+      },
+      {
+        $match: {
+          Tag: { $in: ["Lend", "Borrow", "Repayment", "Repay Loan"] }
+        }
+      }
+    ]
+    const result = await Add.aggregate(pipeline)
+    // console.log(result);
+    
+    res.status(200).json(result)
+
+  }catch(error) {
+    res.status(500).json({message : "Error filtering data", error})
+  }
+}
+
+module.exports.searchByTags = async(req, res) => {
+  const {startDate, endDate, email, tag} = req.body.body
+  if (!startDate || !endDate) {
+    return res
+      .status(400)
+      .json({ error: "Both startDate and endDate are required" });
+  }
+  const start = new Date(startDate);
+  let end = new Date(endDate);
+      end.setUTCHours(23, 59, 59, 999); 
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res
+        .status(400)
+        .json({ error: "Invalid date format. Use YYYY-MM-DD." });
+    }
+    try{
+      const pipeline = [
+        {
+          $match: {
+            email: email,
+            createdAt: {
+              $gte: new Date(start), 
+              $lte: new Date(end)    
+            }
+          },
+        },
+        {
+          $match: {
+            Tag: tag
+          }
+        }
+      ]
+      const result = await Add.aggregate(pipeline)
+      console.log(result);
+      
+      res.status(200).json(result)
+  
+    }catch(error) {
+      res.status(500).json({message : "Error filtering data", error})
+    }
+}
