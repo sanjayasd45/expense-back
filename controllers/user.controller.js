@@ -12,7 +12,7 @@ const loginController = async(req, res) => {
         })
     } 
     const user = await User.findOne({username});
-    console.log("user from login" , user);
+    // console.log("user from login" , user);
     if(user && (await user.matchPassword(password, user.password))){ 
         const response = {
             _id : user._id,

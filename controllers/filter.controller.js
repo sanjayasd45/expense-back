@@ -30,7 +30,7 @@ module.exports.alltime = async (req, res) => {
 };
 module.exports.today = async (req, res) => {
   const email = req.body.body;
-  console.log("req.body.body", req.body.body);
+  // console.log("req.body.body", req.body.body);
   try {
     const pipeline = [
       {
@@ -62,7 +62,7 @@ module.exports.today = async (req, res) => {
 };
 module.exports.fromRange = async (req, res) => {
   const { email, duration } = req.body.body;
-  console.log("req.body.body", req.body.body);
+  // console.log("req.body.body", req.body.body);
   try {
     const pipeline = [
       {
@@ -108,7 +108,7 @@ module.exports.dateRange = async (req, res) => {
     }
   if(isChecked){
       try {
-        console.log(`Start Date: ${start}, End Date: ${end}`);
+        // console.log(`Start Date: ${start}, End Date: ${end}`);
         const data = await Add.find({
           email,
           createdAt: {
@@ -230,11 +230,55 @@ module.exports.searchByTags = async(req, res) => {
         }
       ]
       const result = await Add.aggregate(pipeline)
-      console.log(result);
+      // console.log(result);
       
       res.status(200).json(result)
   
     }catch(error) {
       res.status(500).json({message : "Error filtering data", error})
+    }
+}
+
+module.exports.optNames = async(req, res) => {
+  const {email, tag} = req.body.body
+  // console.log(req.body);
+  console.log(email, tag);
+  
+  
+  if (!email) {
+    return res
+      .status(400)
+      .json({ error: "Email is required" });
+  }
+    try{
+      const pipeline = [
+        {
+          $match: {
+            email: email
+          }
+        },
+        {
+          $match: {
+            Tag: tag
+          }
+        },
+        {
+          $group: {
+            _id: "$name" // Group by the `name` field
+          }
+        },
+        {
+          $project: {
+            _id: 0, // Exclude the `_id` field from the output
+            name: "$_id" // Include the `name` field in the output
+          }
+        }
+      ]
+      const result = await Add.aggregate(pipeline)
+      const namesArray = result.map(item => item.name);
+      console.log(namesArray);
+      res.status(200).json(namesArray)
+    }catch(error) {
+      res.status(500).json({message : "Error in finding data", error})
     }
 }
