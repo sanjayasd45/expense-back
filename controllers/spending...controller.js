@@ -15,15 +15,35 @@ module.exports.addSpending = async(req, res) => {
     }
 }
 module.exports.getRecentData = async (req, res) => {
-
-    // console.log("getRecentData",req.body);
-    const { email } = req.body.body;
+    const { email, page, limit } = req.body.body;
+    const page1  = Number(page) || 1;
+    const limit1 = Number(limit) || 10; 
+    
     try {
-        const response = await Add.find({ email });
-        // console.log("getRecentData",response);
+        const skip = (page1 - 1) * limit1;
+        console.log(skip);
         
-        res.status(200).json({ message: "Spending data retrieved successfully", response });
+        const result = await Add.aggregate([
+            { $match: { email } },
+            { $sort: { createdAt: -1 } }, // Sort by most recent first
+            {
+                $facet: {
+                    data: [{ $skip: skip }, { $limit: limit1 }],
+                    totalCount: [{ $count: "count" }]
+                }
+            }
+        ]);
+        console.log("data", result);
+
+        const data = result[0].data;
+        const totalDocs = result[0].totalCount[0]?.count || 0;
+        const totalPages = Math.ceil(totalDocs / limit);
+
+        console.log("totalDocs", totalDocs );
+        
+
+        return res.json({ data, totalDocs, totalPages, currentPage: page, limit });
     } catch (error) {
-        res.status(500).json({ message: "Error retrieving spending data", error });
+        return res.status(500).json({ message: "Error retrieving spending data", error });
     }
 };
