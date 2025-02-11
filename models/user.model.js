@@ -22,6 +22,28 @@ const userSchema = new Schema({
     },
     spendingTags : {
         type : Object
+    },
+    info: {
+        room: {
+            room_rent: {
+                type: Number, // Assuming room rent is a number (modify as needed)
+                required: false
+            },
+            electricity_rate: {
+                type: Number, // Assuming room rent is a number (modify as needed)
+                required: false
+            },
+            meter_reading: [{
+                date: {
+                    type: Date,
+                    // required: true
+                },
+                reading: {
+                    type: Number, // Assuming reading is a number
+                    // required: true
+                }
+            }]
+        }
     }
 }, {timestamps: true});
 

@@ -1,3 +1,4 @@
+const { updateRoomRentInfo } = require("../controllers/user.controller");
 const { authenticateToken } = require("../middlewares/user.middleware");
 const User = require("../models/user.model");
 const clientUrl = process.env.CLIENT_URL
@@ -11,7 +12,7 @@ router.get("/getUser", authenticateToken, async(req, res) => {
         user
     })
 })
-
+router.post("/update-roomrent-info", updateRoomRentInfo)
 
 
 

@@ -98,7 +98,44 @@ const signupController = async (req, res, next) => {
         next(error); // Pass error to the error-handling middleware
     }
 }
+const updateRoomRentInfo = async (req, res) => {
+    const { email, room_rent, electricity_rate, meter_reading } = req.body.body;
+
+    if (!email || !room_rent || !electricity_rate) {
+        return res.status(400).json({
+            message: "All fields are required"
+        });
+    }
+
+    try {
+        const response = await User.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    "info.room.room_rent": room_rent,
+                    "info.room.electricity_rate": electricity_rate,
+                },
+            },
+            { new: true } 
+        );
+        
+        if (!response) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json({
+            message: "Room Rent Info Updated",
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        });
+    }
+};
+
 module.exports = {
     loginController,
-    signupController
+    signupController,
+    updateRoomRentInfo
 }
