@@ -37,24 +37,6 @@ mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mong
         })
     })
     
-// const sessionConfig = {
-//     secret: 'userp-',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: secure },
-//     maxAge: 24 * 60 * 60 * 100
-// };
-// const redisClient = Redis.createClient({
-//         password: redisPassword,
-//         socket: {
-//               host: 'redis-10188.c323.us-east-1-2.ec2.redns.redis-cloud.com',
-//               port: 10188
-//             }
-//           });
-        
-//         redisClient.connect()
-//           .then(() => console.log('Connected to Redis'))
-//           .catch((error) => console.error('Error connecting to Redis:', error));
 
 const store = MongoStore.create({
     mongoUrl: `mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/${DBType}?retryWrites=true&w=majority`,
@@ -64,7 +46,10 @@ const store = MongoStore.create({
     touchAfter: 24 * 3600,
   });
 
-
+// to protect server from spinning down
+setInterval(() => {
+    console.log(" . ");
+}, [1000 * 60 * 3]   )
 
 store.on("error", () => {
     console.log("ERROR in MONGO SESSION STORE", err);

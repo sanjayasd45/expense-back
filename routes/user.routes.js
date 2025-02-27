@@ -12,6 +12,11 @@ router.get("/getUser", authenticateToken, async(req, res) => {
         user
     })
 })
+router.get("/ping", async(req, res) => {
+    res.status(200).json({
+        "message" : "ping"
+    })
+})
 router.post("/update-roomrent-info", updateRoomRentInfo)
 
 
