@@ -12,16 +12,18 @@ const addAmount = require('./routes/amount.routes.js')
 const deleteRoute = require('./routes/delete.routes.js')
 const addSpending = require('./routes/spending.routes.js')
 const filter = require('./routes/filter.routes.js')
+const migration = require("./routes/migration.routes.js")
 const passportSetup = require("./passport.js");
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
 const clientUrl = process.env.CLIENT_URL
 const Redis = require('redis');
-const RedisStore = require('connect-redis').default; 
+const RedisStore = require('connect-redis').default; ''
 const secure = process.env.NODE_ENV === 'production'; 
 const redisPassword = process.env.REDISPASS
 const sessionSecret = process.env.SESSION_SECRET
 const cookieParser = require('cookie-parser');
+const Add = require('./models/add.model.js')
 
 
 const app = express()
@@ -30,10 +32,39 @@ let DBType = "test";
 if(secure){
     DBType = "expt"
 }
+
+// const updateRunningBalances = async() => {
+//     // Get all distinct users
+//     console.log("Updating running balances...");
+    
+//     const users = await Add.distinct("email");
+
+//     for (const email of users) {
+//         console.log(`Updating running balance for: ${email}`);
+
+//         // Fetch all transactions of the user, sorted by date
+//         const transactions = await Add.find({ email }).sort({ createdAt: 1 });
+
+//         let runningBalance = 0;
+
+//         for (const transaction of transactions) {
+//             // Compute new balance
+//             runningBalance += transaction.deduction ? -Number(transaction.amount) : Number(transaction.amount);
+
+//             // Update the document
+//             await Add.updateOne({ _id: transaction._id }, { $set: { runningBalance } });
+//         }
+//     }
+
+//     // return "Running balances updated successfully";
+//     console.log("Running balances updated successfully");
+    
+// }
 mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/${DBType}?retryWrites=true&w=majority`)
     .then(() => {
         app.listen(port, () => {
             console.log('server is running at ', port);
+            // updateRunningBalances().catch(console.error);
         })
     })
     
@@ -45,11 +76,6 @@ const store = MongoStore.create({
     },
     touchAfter: 24 * 3600,
   });
-
-// to protect server from spinning down
-setInterval(() => {
-    console.log(" . ");
-}, [1000 * 60 * 3]   )
 
 store.on("error", () => {
     console.log("ERROR in MONGO SESSION STORE", err);
@@ -77,6 +103,11 @@ app.use(cors({
 
 
 
+// Run the script
+
+
+
+
 app.use(cookieParser(sessionSecret));
 app.use(session(sessionConfig));
 app.use(bodyParser.json());
@@ -89,6 +120,7 @@ app.use("/auth", authRoutes)
 app.use("/user", userRoutes)
 app.use("/amount", addAmount)
 app.use("/spending", addSpending)
+app.use("/migration", migration)
 app.use("/filter", filter)
 app.use("/delete", deleteRoute)
 app.get("/", (req, res) => {

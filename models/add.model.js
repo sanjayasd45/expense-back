@@ -19,7 +19,8 @@ const addSchema = new Schema({
         type : String,
         // default : "General Expense"
     },
-    deduction : Boolean
+    deduction : Boolean,
+    runningBalance: Number,
 }, {timestamps: true});
 
 const Add = mongoose.model("Add", addSchema)
