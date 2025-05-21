@@ -4,7 +4,7 @@ const Add = require('../models/add.model')
 module.exports.addSpending = async(req, res) => {
     // console.log(req.body.body);
     try {    
-        const { email, amount, Tag, name, note, deduction } = req.body.body;
+        const { email, amount, Tag, name, note, deduction, fileId } = req.body.body;
         console.log("email", email);
         
         const lastTransaction = await Add.findOne({ email }).sort({ createdAt: -1 });
@@ -19,7 +19,7 @@ module.exports.addSpending = async(req, res) => {
         
         let = runningBalance = newBalance;
         console.log("runningBalance", runningBalance);
-        const data = { email, amount, Tag, name : name.trim(), note, deduction ,runningBalance};
+        const data = { email, amount, Tag, name : name.trim(), note, deduction ,runningBalance, fileId};
         console.log("data",data);
         
         const addition = await Add.create(data); 

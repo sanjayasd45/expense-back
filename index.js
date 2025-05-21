@@ -13,6 +13,7 @@ const deleteRoute = require('./routes/delete.routes.js')
 const addSpending = require('./routes/spending.routes.js')
 const filter = require('./routes/filter.routes.js')
 const migration = require("./routes/migration.routes.js")
+const helpers = require("./routes/helpers.routes.js")
 const passportSetup = require("./passport.js");
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
@@ -123,6 +124,7 @@ app.use("/spending", addSpending)
 app.use("/migration", migration)
 app.use("/filter", filter)
 app.use("/delete", deleteRoute)
+app.use("/helpers", helpers)
 app.get("/", (req, res) => {
     res.send("i am root")
 })

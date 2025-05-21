@@ -19,6 +19,10 @@ const addSchema = new Schema({
         type : String,
         // default : "General Expense"
     },
+    fileId : {
+        type : String,
+        default : ""
+    },
     deduction : Boolean,
     runningBalance: Number,
 }, {timestamps: true});

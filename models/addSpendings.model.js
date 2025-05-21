@@ -23,7 +23,8 @@ const addSpendingsSchema = new Schema({
     note : {
         type : String,
         default : "General Expense"
-    }
+    },
+
 }, {timestamps: true});
 
 const AddSpending = mongoose.model("AddSpending", addSpendingsSchema)
