@@ -16,7 +16,7 @@ module.exports.cloudinarySignature = async (req, res) => {
     });
     req.on('end', () => {
         const uploadStream = cloudinary.uploader.upload_stream(
-            { folder: 'uploads' }, // Optional: customize folder
+            { folder: 'Expense Tracker' }, // Optional: customize folder
             (error, result) => {
                 if (error) return res.status(500).json({ error: error.message });
                 res.json({ url: result.secure_url });
