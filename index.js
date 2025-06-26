@@ -35,6 +35,7 @@ let DBType = "test";
 if(secure){
     DBType = "expt"
 }
+const interval = 300000; // 5 minutes in milliseconds
 function reloadWebsite() {
   axios
     .get(url)
@@ -46,6 +47,7 @@ function reloadWebsite() {
     });
 }
 
+setInterval(reloadWebsite, interval);
 
 // const updateRunningBalances = async() => {
 //     // Get all distinct users
