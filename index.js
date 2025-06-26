@@ -18,6 +18,7 @@ const passportSetup = require("./passport.js");
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
 const clientUrl = process.env.CLIENT_URL
+const url = process.env.HOST_URL
 const Redis = require('redis');
 const RedisStore = require('connect-redis').default; ''
 const secure = process.env.NODE_ENV === 'production'; 
@@ -25,6 +26,7 @@ const redisPassword = process.env.REDISPASS
 const sessionSecret = process.env.SESSION_SECRET
 const cookieParser = require('cookie-parser');
 const Add = require('./models/add.model.js')
+const axios = require('axios');
 
 
 const app = express()
@@ -33,6 +35,17 @@ let DBType = "test";
 if(secure){
     DBType = "expt"
 }
+function reloadWebsite() {
+  axios
+    .get(url)
+    .then((response) => {
+      console.log("website reloaded");
+    })
+    .catch((error) => {
+      console.error(`Error : ${error.message}`);
+    });
+}
+
 
 // const updateRunningBalances = async() => {
 //     // Get all distinct users
