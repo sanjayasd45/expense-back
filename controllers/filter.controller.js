@@ -242,7 +242,7 @@ module.exports.searchByTags = async(req, res) => {
 module.exports.optNames = async(req, res) => {
   const {email, tag} = req.body.body
   // console.log(req.body);
-  console.log(email, tag);
+  // console.log(email, tag);
   
   
   if (!email) {
@@ -276,7 +276,7 @@ module.exports.optNames = async(req, res) => {
       ]
       const result = await Add.aggregate(pipeline)
       const namesArray = result.map(item => item.name);
-      console.log(namesArray);
+      // console.log(namesArray);
       res.status(200).json(namesArray)
     }catch(error) {
       res.status(500).json({message : "Error in finding data", error})

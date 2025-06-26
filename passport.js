@@ -12,7 +12,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (email, done) => {
     try {
-        console.log("Deserializing user with email:", email);
+        // console.log("Deserializing user with email:", email);
         const user = await User.findOne({ email });
         if (user) {
             done(null, user);
@@ -43,12 +43,12 @@ passport.use(
                     profile_img: profile.picture,
                 };
 
-                console.log("from backend", user);
+                // console.log("from backend", user);
 
                 // Check for existing user in database
                 let existingUser = await User.findOne({ email: user.email });
                 if (!existingUser) {
-                    console.log("Creating new user");
+                    // console.log("Creating new user");
                     existingUser = await new User(user).save();
                 }
 

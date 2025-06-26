@@ -5,25 +5,25 @@ module.exports.addSpending = async(req, res) => {
     // console.log(req.body.body);
     try {    
         const { email, amount, Tag, name, note, deduction, fileId } = req.body.body;
-        console.log("email", email);
+        // console.log("email", email);
         
         const lastTransaction = await Add.findOne({ email }).sort({ createdAt: -1 });
-        console.log("lastTransaction", lastTransaction);
+        // console.log("lastTransaction", lastTransaction);
         
 
         let previousBalance = lastTransaction ? lastTransaction.runningBalance : 0;
-        console.log("previousBalance", previousBalance);
+        // console.log("previousBalance", previousBalance);
         
         let newBalance = Number(previousBalance) + (deduction ? -Number(amount) : Number(amount));
-        console.log("newBalance", newBalance);
+        // console.log("newBalance", newBalance);
         
         let = runningBalance = newBalance;
-        console.log("runningBalance", runningBalance);
+        // console.log("runningBalance", runningBalance);
         const data = { email, amount, Tag, name : name.trim(), note, deduction ,runningBalance, fileId};
-        console.log("data",data);
+        // console.log("data",data);
         
         const addition = await Add.create(data); 
-        console.log("addition", addition);
+        // console.log("addition", addition);
         
 
         
@@ -40,7 +40,7 @@ module.exports.getRecentData = async (req, res) => {
     
     try {
         const skip = (page1 - 1) * limit1;
-        console.log(skip);
+        // console.log(skip);
         
         const result = await Add.aggregate([
             { $match: { email } },
@@ -52,13 +52,13 @@ module.exports.getRecentData = async (req, res) => {
                 }
             }
         ]);
-        console.log("data", result);
+        // console.log("data", result);
 
         const data = result[0].data;
         const totalDocs = result[0].totalCount[0]?.count || 0;
         const totalPages = Math.ceil(totalDocs / limit);
 
-        console.log("totalDocs", totalDocs );
+        // console.log("totalDocs", totalDocs );
         
 
         return res.json({ data, totalDocs, totalPages, currentPage: page, limit });

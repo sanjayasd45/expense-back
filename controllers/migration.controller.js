@@ -6,7 +6,7 @@ const updateRunningBalances = async() => {
     const users = await Add.distinct("email");
 
     for (const email of users) {
-        console.log(`Updating running balance for: ${email}`);
+        // console.log(`Updating running balance for: ${email}`);
 
         // Fetch all transactions of the user, sorted by date
         const transactions = await Add.find({ email }).sort({ createdAt: 1 });
