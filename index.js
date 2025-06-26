@@ -35,7 +35,7 @@ let DBType = "test";
 if(secure){
     DBType = "expt"
 }
-const interval = 300000; // 5 minutes in milliseconds
+const interval = 30000; // 5 minutes in milliseconds
 function reloadWebsite() {
   axios
     .get(url)
