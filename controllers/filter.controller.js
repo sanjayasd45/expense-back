@@ -111,17 +111,31 @@ module.exports.dateRange = async (req, res) => {
       const initialBalanceResult = await Add.aggregate([
         {
           $match: {
-            createdAt: { $lt: startDate } // All txns before the start date
-          }
+            email: email,
+            createdAt: {
+              $lt: start, // All txns before the start date
+            },
+          },
         },
         {
           $group: {
             _id: null,
-            total: { $sum: "$amount" } // Sum of all amounts
+            total: {
+              $sum: {
+                $cond: {
+                  if: "$deduction",           // if deduction is true
+                  then: { $multiply: ["$amount", -1] }, // subtract
+                  else: "$amount"             // else add
+                }
+              }
+            }
           }
         }
+
       ]);
       const initialBalance = initialBalanceResult[0]?.total || 0;
+      console.log("Initial Balance:", initialBalanceResult);
+
       const data = await Add.find({
         email,
         createdAt: {
@@ -130,8 +144,8 @@ module.exports.dateRange = async (req, res) => {
         },
       });
       // console.log("Data fetched for date range:", data , initialBalance);
-      
-      res.status(200).json({ txnData : data, initialBalance });
+
+      res.status(200).json({ txnData: data, initialBalance });
     } catch (error) {
       console.error("Error fetching data:", error);
       res.status(500).json({ error: "An error occurred while fetching data" });
