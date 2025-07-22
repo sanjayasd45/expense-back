@@ -38,44 +38,20 @@ if(secure){
 const interval = 30000; // 5 minutes in milliseconds
 function reloadWebsite() {
   axios
-    .get(url)
-    .then((response) => {
-      console.log("website reloaded");
-    })
-    .catch((error) => {
-      console.error(`Error : ${error.message}`);
-    });
+  .get(url)
+  .then((response) => {
+    console.log("website reloaded");
+  })
+  .catch((error) => {
+    console.error(`Error : ${error.message}`);
+  });
+}
+if(secure) {
+  setInterval(reloadWebsite, interval);
 }
 
-setInterval(reloadWebsite, interval);
 
-// const updateRunningBalances = async() => {
-//     // Get all distinct users
-//     console.log("Updating running balances...");
-    
-//     const users = await Add.distinct("email");
 
-//     for (const email of users) {
-//         console.log(`Updating running balance for: ${email}`);
-
-//         // Fetch all transactions of the user, sorted by date
-//         const transactions = await Add.find({ email }).sort({ createdAt: 1 });
-
-//         let runningBalance = 0;
-
-//         for (const transaction of transactions) {
-//             // Compute new balance
-//             runningBalance += transaction.deduction ? -Number(transaction.amount) : Number(transaction.amount);
-
-//             // Update the document
-//             await Add.updateOne({ _id: transaction._id }, { $set: { runningBalance } });
-//         }
-//     }
-
-//     // return "Running balances updated successfully";
-//     console.log("Running balances updated successfully");
-    
-// }
 mongoose.connect(`mongodb+srv://sanjayasd45:${password}@datacluster.lgoji1f.mongodb.net/${DBType}?retryWrites=true&w=majority`)
     .then(() => {
         app.listen(port, () => {

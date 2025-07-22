@@ -4,12 +4,8 @@ module.exports.deleteTxn = async(req, res) => {
     const _id = req.body
     try{
         const data  = await Add.findByIdAndDelete(_id)
-        // console.log("delete");
-        // console.log(data);
-        
-        return data
+        res.status(200).json(data);
     }catch(err){
-        // console.log(err);
-        throw err
+        res.status(500).json({ message: "Got Error While Deleting ", err });
     }
 }
